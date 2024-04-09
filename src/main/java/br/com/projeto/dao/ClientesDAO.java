@@ -116,7 +116,7 @@ public class ClientesDAO {
         }
     }
     
-    //metodo listar clientes
+    //metodo listar clientes   retorna lista
     public List<Clientes> listarCliente(){
         try {
             //1passo - criar lista
@@ -186,6 +186,7 @@ public class ClientesDAO {
 
             }
             return obj;
+         
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cliente nao encontrado");
             return null;
