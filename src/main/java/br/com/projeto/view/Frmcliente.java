@@ -7,6 +7,7 @@ package br.com.projeto.view;
 import br.com.projeto.dao.ClientesDAO;
 import br.com.projeto.model.Clientes;
 import br.com.projeto.model.Utilitarios;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -141,7 +142,7 @@ public class Frmcliente extends javax.swing.JFrame {
         jLabel16.setText("Cep:");
 
         try {
-            txtcep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######-###")));
+            txtcep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -219,7 +220,7 @@ public class Frmcliente extends javax.swing.JFrame {
         jLabel23.setText("Nome:");
 
         cbuf.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cbuf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SP", "MG", "RJ" }));
+        cbuf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
 
         txtemail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtemail.addActionListener(new java.awt.event.ActionListener() {
@@ -727,7 +728,20 @@ public class Frmcliente extends javax.swing.JFrame {
     }//GEN-LAST:event_txtrgActionPerformed
 
     private void txtcepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcepKeyPressed
+        //parte da biblioteca buscar cep
+        //procurar atualizar essa biblioteca pois muitos cep estao dando invalidos!!!!!
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
+         Clientes obj =  new Clientes();
+         ClientesDAO dao = new ClientesDAO();
+         obj = dao.buscaCep(txtcep.getText());
          
+         txtendereco.setText(obj.getEndereco());
+         txtbairro.setText(obj.getBairro());
+         txtcidade.setText(obj.getCidade());
+         cbuf.setSelectedItem(obj.getUf());               
+         System.out.println(obj.getUf());
+         
+     }
     }//GEN-LAST:event_txtcepKeyPressed
 
     private void txtpesquisaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpesquisaKeyPressed
