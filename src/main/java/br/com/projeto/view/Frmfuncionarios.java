@@ -663,6 +663,7 @@ public class Frmfuncionarios extends javax.swing.JFrame {
 
     private void btnsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalvarActionPerformed
         //botao salvar 
+        //xxx
             Funcionarios obj =  new Funcionarios();
             
             obj.setNome(txtnome.getText());
