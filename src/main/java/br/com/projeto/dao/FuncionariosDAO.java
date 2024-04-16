@@ -8,7 +8,10 @@ import br.com.projeto.jdbc.ConnectionFactory;
 import br.com.projeto.model.Funcionarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class FuncionariosDAO {
@@ -58,4 +61,50 @@ public class FuncionariosDAO {
         }
         
     }
+    
+    //MetodoListarFuncionarios
+    public List<Funcionarios> listarFuncionarios(){
+        try {
+            //1passo - criar lista
+            List<Funcionarios> lista = new ArrayList<>();
+            
+            //2passo- criar metodo sql
+            String sql = "select * from tb_funcionarios";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            
+            ResultSet rs = stmt.executeQuery();//toda vez que usar select usa esse comando
+            
+            while(rs.next()){
+                Funcionarios obj = new Funcionarios();
+                
+                obj.setId(rs.getInt("id"));
+                obj.setNome(rs.getString("nome"));
+                obj.setRg(rs.getString("rg"));
+                obj.setCpf(rs.getString("cpf"));
+                obj.setEmail(rs.getString("email"));
+                obj.setSenha(rs.getString("senha"));
+                obj.setCargo(rs.getString("cargo"));
+                obj.setNivel_acesso(rs.getString("nivel_acesso"));
+                obj.setTelefone(rs.getString("telefone"));
+                obj.setCelular(rs.getString("celular"));
+                obj.setCep(rs.getString("cep"));
+                obj.setEndereco(rs.getString("endereco"));
+                obj.setNumero(rs.getInt("numero"));
+                obj.setComplemento(rs.getString("complemento"));
+                obj.setBairro(rs.getString("bairro"));
+                obj.setCidade(rs.getString("cidade"));
+                obj.setUf(rs.getString("estado"));
+                
+                //add na list
+                lista.add(obj);
+            }
+            return lista;
+            
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro"+erro);
+            return null;
+        }
+        
+    }
+    
 }
