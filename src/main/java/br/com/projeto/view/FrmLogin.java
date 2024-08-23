@@ -4,6 +4,9 @@
  */
 package br.com.projeto.view;
 
+import br.com.projeto.dao.FuncionariosDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Rodrigo
@@ -35,7 +38,7 @@ public class FrmLogin extends javax.swing.JFrame {
         btnentrar = new javax.swing.JButton();
         btnsair = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Seja bem vindo ao sistema - autenticação");
 
         jPanel2.setBackground(new java.awt.Color(102, 102, 255));
@@ -78,6 +81,11 @@ public class FrmLogin extends javax.swing.JFrame {
 
         btnentrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnentrar.setText("Entrar");
+        btnentrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnentrarActionPerformed(evt);
+            }
+        });
 
         btnsair.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnsair.setText("Sair");
@@ -138,6 +146,22 @@ public class FrmLogin extends javax.swing.JFrame {
     private void txtemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtemailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtemailActionPerformed
+
+    private void btnentrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnentrarActionPerformed
+        // botao entrar
+        try {
+            String email, senha;
+            email = txtemail.getText();
+            senha = txtSenha.getText();
+            
+            FuncionariosDAO dao = new FuncionariosDAO();
+            dao.efetuaLogin(email, senha);
+            
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showConfirmDialog(null, "Erro");
+        }
+    }//GEN-LAST:event_btnentrarActionPerformed
 
     /**
      * @param args the command line arguments

@@ -7,6 +7,8 @@ package br.com.projeto.dao;
 import br.com.projeto.jdbc.ConnectionFactory;
 import br.com.projeto.model.Clientes;
 import br.com.projeto.model.Funcionarios;
+import br.com.projeto.view.FrmLogin;
+import br.com.projeto.view.Frmmenu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -259,5 +261,37 @@ public class FuncionariosDAO {
         }
         
     }
+     
+     //metodo efetua o login
+     public void efetuaLogin(String email, String senha){
+         try {
+         
+             //1passo - SQL
+             String sql = "select * from tb_funcionarios where email =? and senha = ?";
+             PreparedStatement stmt = con.prepareStatement(sql);
+             stmt.setString(1, email);
+             stmt.setString(2, senha);
+             
+              ResultSet rs = stmt.executeQuery();//toda vez que usar select usa esse comando
+              if(rs.next()){
+                  //usuario logou
+                   JOptionPane.showMessageDialog(null, "Seja bem vindo ao sistema");
+                   Frmmenu tela = new Frmmenu();
+                   tela.setVisible(true);
+              }else{
+                  //dados incorretos
+                  JOptionPane.showMessageDialog(null, "Dados incorretos!");
+                  FrmLogin login = new FrmLogin();// retorna e tela de login para fazer ele novamente
+                  login.setVisible(true);
+              }
+             //
+             
+         } catch (SQLException erro) {
+             JOptionPane.showMessageDialog(null, "Erro"+erro);
+         
+         
+         }
+         
+     }
     
 }
