@@ -282,8 +282,9 @@ public class FuncionariosDAO {
               }else{
                   //dados incorretos
                   JOptionPane.showMessageDialog(null, "Dados incorretos!");
-                  FrmLogin login = new FrmLogin();// retorna e tela de login para fazer ele novamente
-                  login.setVisible(true);
+                  new FrmLogin().setVisible(true);
+                 /* FrmLogin login = new FrmLogin();// retorna e tela de login para fazer ele novamente
+                  login.setVisible(true);*/
               }
              //
              
