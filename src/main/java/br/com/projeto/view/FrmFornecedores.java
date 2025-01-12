@@ -47,7 +47,7 @@ public class FrmFornecedores extends javax.swing.JFrame {
         
         } 
     }
-    
+    //correcao de um erro
     
     public FrmFornecedores() {
         initComponents();
