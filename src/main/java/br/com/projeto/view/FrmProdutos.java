@@ -171,7 +171,7 @@ public class FrmProdutos extends javax.swing.JFrame {
                         .addComponent(txtpesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnpesquisar)
-                        .addGap(0, 391, Short.MAX_VALUE)))
+                        .addGap(0, 403, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -221,6 +221,11 @@ public class FrmProdutos extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        cbfornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbfornecedoresMouseClicked(evt);
             }
         });
         cbfornecedores.addActionListener(new java.awt.event.ActionListener() {
@@ -284,7 +289,7 @@ public class FrmProdutos extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBusca))
                     .addComponent(cbfornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(339, Short.MAX_VALUE))
+                .addContainerGap(351, Short.MAX_VALUE))
         );
         painel_dadosLayout.setVerticalGroup(
             painel_dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,10 +352,6 @@ public class FrmProdutos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(287, 287, 287)
                 .addComponent(btnnovo1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -360,6 +361,7 @@ public class FrmProdutos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnexcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -414,28 +416,19 @@ public class FrmProdutos extends javax.swing.JFrame {
         //buscaClienteNome
         String nome = "%" +txtpesquisa.getText() + "%";
         
-        ClientesDAO dao = new ClientesDAO();
-        List<Clientes> lista = dao.buscaClienteNome(nome);
+        ProdutosDAO dao = new ProdutosDAO();
+        List<Produtos> lista = dao.listarProdutosPorNome(nome);
         DefaultTableModel dados = (DefaultTableModel) tabelaProdutos.getModel();
         dados.setNumRows(0);
         
-        for(Clientes c:lista){ //para cada linha add um obj vetor
+        for(Produtos c:lista){ //para cada linha add um obj vetor
             dados.addRow(new Object[]{
             
-            c.getId(),
-            c.getNome(),
-            c.getRg(),
-            c.getCpf(),
-            c.getEmail(),
-            c.getTelefone(),
-            c.getCelular(),
-            c.getCep(),
-            c.getEndereco(),
-            c.getNumero(),
-            c.getComplemento(),
-            c.getBairro(),
-            c.getCidade(),
-            c.getUf()
+           c.getId(),
+                c.getDescricao(),
+                c.getPreco(),
+                c.getQtd_estoque(),
+                c.getFornecedor().getNome()
             });
         
         }
@@ -444,28 +437,19 @@ public class FrmProdutos extends javax.swing.JFrame {
     private void txtpesquisaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpesquisaKeyPressed
         String nome = "%" +txtpesquisa.getText() + "%";
         
-        ClientesDAO dao = new ClientesDAO();
-        List<Clientes> lista = dao.buscaClienteNome(nome);
+        ProdutosDAO dao = new ProdutosDAO();
+        List<Produtos> lista = dao.listarProdutosPorNome(nome);
         DefaultTableModel dados = (DefaultTableModel) tabelaProdutos.getModel();
         dados.setNumRows(0);
         
-        for(Clientes c:lista){ //para cada linha add um obj vetor
+        for(Produtos c:lista){ //para cada linha add um obj vetor
             dados.addRow(new Object[]{
             
-            c.getId(),
-            c.getNome(),
-            c.getRg(),
-            c.getCpf(),
-            c.getEmail(),
-            c.getTelefone(),
-            c.getCelular(),
-            c.getCep(),
-            c.getEndereco(),
-            c.getNumero(),
-            c.getComplemento(),
-            c.getBairro(),
-            c.getCidade(),
-            c.getUf()
+           c.getId(),
+                c.getDescricao(),
+                c.getPreco(),
+                c.getQtd_estoque(),
+                c.getFornecedor().getNome()
             });
         
         }
@@ -474,31 +458,30 @@ public class FrmProdutos extends javax.swing.JFrame {
     private void btnBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaActionPerformed
         //botao buscar cliente por nome
         String nome = txtdescricao.getText();
-        Clientes obj = new Clientes();
-        ClientesDAO dao = new ClientesDAO();
+        Produtos obj = new Produtos();
+        ProdutosDAO dao = new ProdutosDAO();
 
         obj = dao.consultaPorNome(nome);
+        
+        cbfornecedores.removeAllItems();
 
-        if (obj.getNome()!= null) {
+        if (obj.getDescricao()!= null) {
 
             //exibir os dados do obj nos campos de texto
             txtcodigo.setText(String.valueOf(obj.getId()));
-            txtdescricao.setText(obj.getNome());
-            txtrg.setText(obj.getRg());
-            txtcpf.setText(obj.getCpf());
-            txtpreco.setText(obj.getEmail());
-            txttelefonefixo.setText(obj.getTelefone());
-            txtcelular.setText(obj.getCelular());
-            txtcep.setText(obj.getCep());
-            txtendereco.setText(obj.getEndereco());
-            txtnumero.setText(String.valueOf(obj.getNumero()));
-            txtcomplemento.setText(obj.getComplemento());
-            txtbairro.setText(obj.getBairro());
-            txtcidade.setText(obj.getCidade());
-            cbfornecedores.setSelectedItem(obj.getUf());
+            txtdescricao.setText(obj.getDescricao());
+          
+            txtpreco.setText(String.valueOf(obj.getPreco()));
+          
+            cbfornecedores.setSelectedItem(String.valueOf(obj.getQtd_estoque()));
+            
+            Fornecedores f = new Fornecedores();
+            FornecedoresDAO fdao = new FornecedoresDAO();
+            
+            cbfornecedores.getModel().setSelectedItem(f);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Cliente nao encontrado");
+            JOptionPane.showMessageDialog(null, "Produto nao encontrado");
         }
     }//GEN-LAST:event_btnBuscaActionPerformed
 
@@ -578,12 +561,12 @@ public class FrmProdutos extends javax.swing.JFrame {
 
     private void btnexcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexcluir1ActionPerformed
         //botao excluir
-        Fornecedores obj =  new Fornecedores();
+        Produtos obj =  new Produtos();
 
         obj.setId(Integer.parseInt(txtcodigo.getText()));
 
-        FornecedoresDAO dao = new FornecedoresDAO();
-        dao.excluirFornecedores(obj);
+        ProdutosDAO dao = new ProdutosDAO();
+        dao.excluir(obj);
 
         new Utilitarios().LimparTela(painel_dados);
     }//GEN-LAST:event_btnexcluir1ActionPerformed
@@ -591,6 +574,18 @@ public class FrmProdutos extends javax.swing.JFrame {
     private void btnnovo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnovo1ActionPerformed
         new Utilitarios().LimparTela(painel_dados);
     }//GEN-LAST:event_btnnovo1ActionPerformed
+
+    private void cbfornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbfornecedoresMouseClicked
+        // TODO add your handling code here:
+        FornecedoresDAO dao = new FornecedoresDAO();
+        List<Fornecedores>listafFornecedoreses=dao.listarFornecedores();
+        cbfornecedores.removeAllItems();
+        
+        for (Fornecedores f : listafFornecedoreses) {
+            cbfornecedores.addItem(f);
+        }
+        
+    }//GEN-LAST:event_cbfornecedoresMouseClicked
 
     /**
      * @param args the command line arguments
